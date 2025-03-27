@@ -22,8 +22,7 @@ COPY . .
 # アプリケーションがリッスンするポートを公開 (Koyebは$PORT環境変数を参照するため、必須ではないが記述しておく)
 # EXPOSE 8000 # Koyebでは$PORTが使われるため、固定ポートの公開は必須ではない
 
-# アプリケーションを実行するコマンド
+# アプリケーションを実行するコマンド (shell形式を使用し、環境変数 $PORT を展開)
 # Koyebは$PORT環境変数を設定するので、それにバインドする
-# uvicorn server:app --host 0.0.0.0 --port $PORT
-# $PORTが未設定の場合のフォールバックとして8000を使う例
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
+# $PORTが未設定の場合のフォールバックとして8000を使う
+CMD uvicorn server:app --host 0.0.0.0 --port ${PORT:-8000}
