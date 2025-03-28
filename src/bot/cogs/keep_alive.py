@@ -19,7 +19,7 @@ class KeepAliveCog(commands.Cog):
         self.keep_alive.cancel()
         logger.info("KeepAliveCog がアンロードされ、keep_alive タスクがキャンセルされました。")
 
-    @tasks.loop(minutes=30)
+    @tasks.loop(minutes=5)
     async def keep_alive(self):
         """Koyebのスリープを防ぐための定期実行タスク"""
         try:
