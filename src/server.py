@@ -41,8 +41,8 @@ def run_bot_in_thread() -> None:
 
         intents = discord.Intents.default() # Intentsを定義
         # 必要に応じてIntentsを有効化
-        # intents.message_content = True
-        # intents.members = True
+        intents.message_content = True # メッセージ内容のIntentを有効化
+        # intents.members = True # 必要であればメンバーIntentも有効化
 
         bot_client = DodgersBot(intents=intents) # intentsを渡す
         # start_bot関数がトークンとボットインスタンスを受け取るように修正が必要な場合がある
