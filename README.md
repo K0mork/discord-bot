@@ -48,12 +48,13 @@ docker build -t dodgers-bot .
 docker run -p 8000:8000 --env-file .env dodgers-bot
 ```
 
-## デプロイ (Koyeb)
+## デプロイ (Northflank)
 
-1. Koyebに新しいアプリを作成
-2. GitHubリポジトリを選択
-3. 環境変数を設定
-4. デプロイ
+1. Northflankに新しいサービスを作成
+2. ソースとしてGitHubリポジトリを選択
+3. ビルドオプションでDockerfileを選択
+4. 環境変数を設定
+5. デプロイ
 
 ## 開発
 
