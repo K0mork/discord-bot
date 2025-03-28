@@ -28,5 +28,5 @@ COPY --chown=appuser:appuser src ./src
 COPY --chown=appuser:appuser bot.py ./
 
 
-# アプリケーション実行
-CMD ["python", "bot.py"]
+# アプリケーション実行 (uvicornでFastAPIサーバーを起動)
+CMD ["uvicorn", "src.server:app", "--host", "0.0.0.0", "--port", "8000"]
