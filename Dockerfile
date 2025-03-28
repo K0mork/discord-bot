@@ -26,6 +26,8 @@ ENV PATH=/home/appuser/.local/bin:$PATH
 # アプリケーションコードをコピー
 COPY --chown=appuser:appuser src ./src
 COPY --chown=appuser:appuser .env ./
+COPY --chown=appuser:appuser bot.py ./
+
 
 # アプリケーション実行
-CMD ["uvicorn", "src.server:app", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
+CMD ["python", "bot.py"]
