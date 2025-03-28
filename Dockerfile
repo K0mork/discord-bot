@@ -25,7 +25,6 @@ ENV PATH=/home/appuser/.local/bin:$PATH
 
 # アプリケーションコードをコピー
 COPY --chown=appuser:appuser src ./src
-COPY --chown=appuser:appuser .env ./
 COPY --chown=appuser:appuser bot.py ./
 
 
