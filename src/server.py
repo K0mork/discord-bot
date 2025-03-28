@@ -8,15 +8,14 @@ from typing import Optional
 from src.config import config
 from src.bot.core import DodgersBot
 
-# ロギング設定 (レベルをDEBUGに変更)
-# discordライブラリのログもDEBUGレベルで出力するように設定
+# ロギング設定 (レベルをINFOに戻す)
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO, # DEBUGからINFOに戻す
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-# discordライブラリのロガーを取得し、レベルをDEBUGに設定
-discord_logger = logging.getLogger('discord')
-discord_logger.setLevel(logging.DEBUG)
+# discordライブラリのロガーレベル設定を削除 (basicConfigに従う)
+# discord_logger = logging.getLogger('discord')
+# discord_logger.setLevel(logging.DEBUG)
 
 logger = logging.getLogger(__name__) # このモジュールのロガー
 
@@ -37,13 +36,11 @@ async def run_bot_async(token: str) -> None:
     try:
         intents = discord.Intents.default()
         intents.message_content = True
-        logger.debug(f"run_bot_async: Intents設定完了 - message_content={intents.message_content}")
+        # logger.debug(f"run_bot_async: Intents設定完了 - message_content={intents.message_content}") # DEBUGログ削除
         bot_client = DodgersBot(intents=intents)
         logger.info("run_bot_async: Discordボットクライアントを作成しました。")
         logger.info("run_bot_async: bot.start(token) を呼び出します...")
         await bot_client.start(token)
-        # bot.start() は通常、ボットが停止するまでブロックされるため、
-        # この行に到達するのはボットが正常または異常終了した後
         logger.info("run_bot_async: bot.start(token) が完了しました (ボットが停止しました)。")
     except discord.LoginFailure:
         logger.exception("run_bot_async: Discordへのログインに失敗しました。トークンが不正な可能性があります。")
@@ -104,9 +101,9 @@ async def health_check() -> dict:
     }
     if bot_client and bot_client.is_ready():
         status["discord_bot"] = "connected"
-        logger.debug("Health Check: Bot is connected.")
-    else:
-        logger.debug(f"Health Check: Bot status - bot_client is None: {bot_client is None}, is_ready: {bot_client.is_ready() if bot_client else 'N/A'}")
+        # logger.debug("Health Check: Bot is connected.") # DEBUGログ削除
+    # else: # DEBUGログ削除
+        # logger.debug(f"Health Check: Bot status - bot_client is None: {bot_client is None}, is_ready: {bot_client.is_ready() if bot_client else 'N/A'}")
 
     return status
 

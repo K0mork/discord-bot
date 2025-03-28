@@ -9,7 +9,7 @@ from .utils import format_game_info
 # src/server.py で設定済みであれば、重複を避けることも可能
 # ただし、このファイル単体で実行する場合も考慮して設定しておく
 logging.basicConfig(
-    level=logging.DEBUG, # INFOからDEBUGに変更
+    level=logging.INFO, # DEBUGからINFOに戻す
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__) # ロガーを取得
@@ -19,7 +19,7 @@ class DodgersBot(discord.Client):
 
     async def on_ready(self) -> None:
         """Botが起動したときに呼び出されるイベントハンドラ"""
-        logger.info(f'{self.user} としてログインしました') # print を logger.info に変更
+        logger.info(f'{self.user} としてログインしました')
 
     async def on_message(self, message: discord.Message) -> None:
         """メッセージを受信したときに呼び出されるイベントハンドラ"""
@@ -27,7 +27,7 @@ class DodgersBot(discord.Client):
         if message.author == self.user:
             return
 
-        logger.debug(f"メッセージ受信: author='{message.author}', content='{message.content}'") # メッセージ受信ログ
+        # logger.debug(f"メッセージ受信: author='{message.author}', content='{message.content}'") # DEBUGログ削除
 
         # コマンドプレフィックスで始まるかチェック
         if message.content.startswith('!dodgers'):
