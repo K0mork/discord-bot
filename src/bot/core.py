@@ -9,7 +9,7 @@ from .utils import format_game_info
 # src/server.py で設定済みであれば、重複を避けることも可能
 # ただし、このファイル単体で実行する場合も考慮して設定しておく
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG, # INFOからDEBUGに変更
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__) # ロガーを取得
