@@ -1,4 +1,5 @@
 import discord
+from discord.ext import tasks # tasks をインポート
 from typing import Optional
 from datetime import datetime
 import logging  # logging モジュールをインポート
@@ -17,9 +18,18 @@ logger = logging.getLogger(__name__) # ロガーを取得
 class DodgersBot(discord.Client):
     """ドジャースの試合情報を提供するDiscordボット"""
 
+    def __init__(self, *, intents: discord.Intents):
+        super().__init__(intents=intents)
+        # keep_alive タスクを開始前に wait_until_ready を実行するように設定
+        self.keep_alive.add_exception_type(discord.DiscordException) # エラーハンドリングを追加する場合
+
     async def on_ready(self) -> None:
         """Botが起動したときに呼び出されるイベントハンドラ"""
         logger.info(f'{self.user} としてログインしました')
+        # keep_alive タスクを開始
+        if not self.keep_alive.is_running():
+            self.keep_alive.start()
+            logger.info("Keep-alive タスクを開始しました。")
 
     async def on_message(self, message: discord.Message) -> None:
         """メッセージを受信したときに呼び出されるイベントハンドラ"""
@@ -58,6 +68,24 @@ class DodgersBot(discord.Client):
                 await message.channel.send("試合情報の取得中にエラーが発生しました。")
             except discord.HTTPException:
                 logger.error("エラーメッセージの送信に失敗しました。")
+
+    @tasks.loop(minutes=30)
+    async def keep_alive(self):
+        """Koyebのスリープを防ぐための定期実行タスク"""
+        try:
+            # 軽量なAPIコールを実行 (例: ボット自身の情報を取得)
+            user = await self.fetch_user(self.user.id)
+            logger.info(f"Keep-alive: Fetched user info for {user.name}")
+        except Exception as e:
+            logger.error(f"Keep-alive タスク中にエラーが発生しました: {e}", exc_info=True)
+
+    @keep_alive.before_loop
+    async def before_keep_alive(self):
+        """keep_aliveループが開始される前に実行される"""
+        logger.info("Keep-alive: Waiting until bot is ready...")
+        await self.wait_until_ready()
+        logger.info("Keep-alive: Bot is ready, starting loop.")
+
 
 async def start_bot(token: str) -> None:
     """Discord Botを起動する"""
